@@ -1,0 +1,91 @@
+# The .aicontext Methodology: Efficient AI Context Management
+
+## Overview
+
+The `.aicontext` methodology is a design pattern for managing AI context in large, complex codebases. It solves the "Token Bloat" and "Context Blindness" problems by maintaining a distilled, AI-readable representation of the project's architecture, rules, and history.
+
+Instead of requiring an AI agent to scan thousands of files to understand a project, the developer (and the AI) maintains a centralized directory of "truth" that remains synchronized with the code.
+
+---
+
+## Core Concept: The Distilled Context Directory (`.aicontext/`)
+
+The heart of this method is a dedicated directory containing markdown files that serve as the project's "mental model."
+
+| File | Purpose |
+|------|---------|
+| `README.md` | Project overview, high-level architecture, tech stack, and entry points. |
+| `TROUBLESHOOTING.md` | A living document of common bugs, edge cases, and "gotchas" discovered during development. |
+| `DATABASE_SCHEMA.md` | Distilled schema definitions, relationships, and data access patterns (e.g., RLS). |
+| `API_REFERENCE.md` | Essential endpoints, request/response shapes, and authentication flows. |
+| `FEATURE_HISTORY.md` | A reverse-chronological log of implemented features, decisions, and major refactors. |
+
+---
+
+## The Feedback Loop: AI as Documentation Manager
+
+Efficiency is achieved through a tight feedback loop where **documentation update is part of the implementation definition of done.**
+
+When an AI agent completes a task, it is instructed to:
+1. Update `FEATURE_HISTORY.md` with the new changes.
+2. If a bug was fixed, add the root cause and solution to `TROUBLESHOOTING.md`.
+3. If the schema or API changed, update the respective context files.
+
+This ensures that the *next* prompt starts with perfectly updated context, without needing to rescan the entire codebase.
+
+```mermaid
+graph TD
+    User([User Request]) --> Analyze[Analyze Scope & Context]
+    Analyze --> Implement[Implement Changes in IDE]
+    Implement --> Verify[Verify & Test]
+    Verify --> Sync[Sync .aicontext Docs]
+    Sync --> Done([Task Complete])
+```
+
+---
+
+## Example: Sanitized System Prompt
+
+Integrating this methodology into your AI's system instructions ensures it follows the protocol automatically.
+
+```markdown
+# AI Project Update Rule (Generic Template)
+
+🚨 **Critical: Context & Update Protocols**
+
+Before starting any implementation work, you MUST read the following context files to align with the current project state:
+
+| Document | Path |
+|----------|------|
+| **Project Overview** | `.aicontext/README.md` |
+| **Common Pitfalls** | `.aicontext/TROUBLESHOOTING.md` |
+| **System Constants** | `.aicontext/CONSTANTS.md` |
+
+## 1. Development Workflow
+
+1.  **Read Context**: Always start by checking the `.aicontext/` directory.
+2.  **Implement**: Perform the requested changes directly in the codebase.
+3.  **Verify**: Ensure the changes work as expected.
+
+## 2. Mandatory Post-Action Updates
+
+Upon completion of any work, you are RESPONSIBLE for maintaining the context:
+1. Update `.aicontext/FEATURE_HISTORY.md` with a summary of the change.
+2. Update `.aicontext/TROUBLESHOOTING.md` if any non-obvious issues were resolved.
+3. Update specific architecture docs if the "truth" of the system has shifted.
+
+## 3. Technical Constraints
+
+- **UUIDs**: All database primary keys must use UUIDs.
+- **Environment**: Use established CI/CD pipelines for deployment.
+- **Secrets**: Load all sensitive configurations from the secure environment provider.
+```
+
+---
+
+## Implementation Benefits
+
+- **Token Efficiency**: The AI only reads ~20KB of distilled context instead of ~2MB of raw code.
+- **Consistency**: All interactions share the same "source of truth."
+- **Institutional Memory**: The project maintains a high-quality history of why decisions were made, not just what the code does.
+- **Scalability**: New developers or agents can "level up" on the project in minutes by reading the `.aicontext` directory.
