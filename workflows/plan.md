@@ -1,0 +1,1 @@
+Before we implement a plan for this new feature, I want you to throughly examine the current web app context files and current imeplementation roadmap if it exists and come back with any clarfying questions, giving your recommendations along with other options, keeping in mind security and scalability. Do not proceed to creating a plan until I EXPLICITLY SAY "PROCEED!"
